@@ -1,6 +1,6 @@
 {
   "name": "expo-offline-sync",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Deterministic, scoped, engine-agnostic offline mutation & request queue for Expo & React Native with SQLite persistence, optimistic updates, and background sync.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -42,7 +42,8 @@
     "graphql",
     "rest",
     "background-sync",
-    "netinfo"
+    "netinfo",
+    "mamicrose"
   ],
   "author": "mamicrose",
   "license": "MIT",

@@ -191,6 +191,82 @@ await syncClient.enqueueHttp({
 
 ---
 
+## 🔌 Integrations & Recipes
+
+### 1. TanStack Query (React Query) Integration
+Combine the caching power of TanStack Query with `expo-offline-sync`'s persistent SQLite queue:
+
+```typescript
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useOfflineSync } from 'expo-offline-sync';
+
+export function useOfflineCreateTodo() {
+  const queryClient = useQueryClient();
+  const offlineSync = useOfflineSync();
+
+  return useMutation({
+    mutationFn: async (newTodo: { title: string }) => {
+      // Enqueues into durable SQLite and executes when online
+      return offlineSync.enqueue({
+        type: 'CREATE_TODO',
+        payload: newTodo,
+        scope: 'todos',
+      });
+    },
+    onMutate: async (newTodo) => {
+      // Cancel outgoing refetches and update local query cache optimistically
+      await queryClient.cancelQueries({ queryKey: ['todos'] });
+      const previousTodos = queryClient.getQueryData(['todos']);
+
+      queryClient.setQueryData(['todos'], (old: any[] = []) => [
+        { id: 'temp-' + Date.now(), ...newTodo, isPending: true },
+        ...old,
+      ]);
+
+      return { previousTodos };
+    },
+    onError: (err, newTodo, context) => {
+      // Rollback cache if mutation failed
+      queryClient.setQueryData(['todos'], context?.previousTodos);
+    },
+  });
+}
+```
+
+### 2. Zustand Store Integration
+Trigger offline mutations directly inside your Zustand store actions:
+
+```typescript
+import { create } from 'zustand';
+import { syncClient } from './syncClient';
+
+interface CartState {
+  items: string[];
+  addToCart: (item: string) => Promise<void>;
+}
+
+export const useCartStore = create<CartState>((set) => ({
+  items: [],
+  addToCart: async (item) => {
+    // 1. Instant local store update
+    set((state) => ({ items: [...state.items, item] }));
+
+    // 2. Queue persistent server sync
+    await syncClient.enqueue({
+      type: 'ADD_TO_CART',
+      payload: { item },
+      scope: 'cart',
+      onRollback: () => {
+        // Rollback state if server rejects
+        set((state) => ({ items: state.items.filter((i) => i !== item) }));
+      },
+    });
+  },
+}));
+```
+
+---
+
 ## 🎛 Queue Monitoring & Status (`useQueueStatus`)
 
 Track real-time queue counts and trigger manual syncs:
