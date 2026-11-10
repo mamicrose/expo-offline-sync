@@ -1,6 +1,6 @@
 {
   "name": "expo-offline-sync",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Deterministic, scoped, engine-agnostic offline mutation & request queue for Expo & React Native with SQLite persistence, optimistic updates, and background sync.",
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
