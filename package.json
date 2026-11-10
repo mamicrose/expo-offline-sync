@@ -1,0 +1,18 @@
+{
+  "name": "expo-offline-sync-monorepo",
+  "private": true,
+  "description": "Deterministic, scoped, engine-agnostic offline request & mutation queue for Expo & React Native",
+  "scripts": {
+    "build": "pnpm --filter expo-offline-sync build",
+    "test": "pnpm --filter expo-offline-sync test",
+    "typecheck": "pnpm -r typecheck",
+    "lint": "pnpm -r lint"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
+
