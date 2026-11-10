@@ -6,7 +6,10 @@
     "build": "pnpm --filter expo-offline-sync build",
     "test": "pnpm --filter expo-offline-sync test",
     "typecheck": "pnpm -r typecheck",
-    "lint": "pnpm -r lint"
+    "lint": "pnpm -r lint",
+    "version:patch": "pnpm --filter expo-offline-sync version patch && pnpm build",
+    "version:minor": "pnpm --filter expo-offline-sync version minor && pnpm build",
+    "version:major": "pnpm --filter expo-offline-sync version major && pnpm build"
   },
   "devDependencies": {
     "typescript": "^5.7.3"
