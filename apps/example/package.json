@@ -10,6 +10,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@babel/runtime": "^8.1.0",
     "expo": "^52.0.0",
     "expo-offline-sync": "workspace:*",
     "expo-status-bar": "~2.0.1",
@@ -23,4 +24,3 @@
     "typescript": "^5.7.3"
   }
 }
-
